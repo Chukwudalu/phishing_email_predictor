@@ -20,7 +20,6 @@ def load_dataset_from_excel(file_path):
     df = pd.read_csv(file_path)
     return df
 
-# Sample phishing dataset (Replace this with an actual dataset from Excel)
 data_file = "Phishing_validation_emails.csv"
 df = load_dataset_from_excel(data_file)
 
