@@ -26,7 +26,7 @@ df = load_dataset_from_excel(data_file)
 # Text Preprocessing
 def clean_text(text):
     text = str(text).lower()
-    text = re.sub(f"[{string.punctuation}]", "", text)  # Remove punctuation
+    text = re.sub(f"[{string.punctuation}]", "", text) 
     return text
 
 # Convert text to numerical features (TF-IDF Vectorization)
