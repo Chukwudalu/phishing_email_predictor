@@ -105,5 +105,5 @@ Users must explicitly authorize Gmail access, and no email data is stored beyond
 
 ## Author
 
-**Jeremiah Okwuolisa**
+**Jeremiah Okwuolisa** - 
 Computer Information Technology Student
