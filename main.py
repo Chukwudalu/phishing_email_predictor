@@ -9,9 +9,7 @@ from googleapiclient.errors import HttpError
 from classifier import predict_phishing
 
 
-
-
-# If modifying these scopes, delete the file token.json.
+#NOTE:If modifying these scopes, delete the file token.json.
 SCOPES = ["https://mail.google.com/"]
 
 
@@ -49,9 +47,6 @@ def get_unread_emails():
         results = service.users().messages().list(userId='me', labelIds=['INBOX'], q='is:unread').execute()
         messages = results.get('messages', [])
         emails = []
-        # if not messages:
-        #     print('there are no unread messages ')
-        #     return
         
         for msg in messages:
             msg_data = service.users().messages().get(userId='me', id=msg['id']).execute()
@@ -60,7 +55,8 @@ def get_unread_emails():
 
             if 'parts' in payload:
                 for part in payload['parts']:
-                    if part.get('mimeType') == 'text/plain':  # Extract plain text content
+                    # Extract plain text content
+                    if part.get('mimeType') == 'text/plain':  
                         body = part['body'].get('data', '')
                         break
             else: 
@@ -71,18 +67,14 @@ def get_unread_emails():
                 emails.append((msg['id'], body_text.strip('\r\n')))
         
         return emails
-    
-        # return emails
         
     except HttpError as error:
-        # TODO(developer) - Handle errors from gmail API.
         print(f"An error occurred: {error}")
         return None
 
 
 def apply_phishing_prediction_labels(msg_id, msg_label_id):
     service = build("gmail", "v1", credentials=validator())
-    # service.users().messages().modify(userId='me', id=msg_id, body={"addLabelIds": ["SPAM"], "removeLabelIds": ["INBOX"]}).execute()
     try:
         service.users().messages().modify(
             userId='me',
