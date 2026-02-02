@@ -15,7 +15,6 @@ from sklearn.metrics import confusion_matrix
 vectorizer = TfidfVectorizer()
 model = LogisticRegression()
 
-# Load dataset from Excel file
 def load_dataset_from_excel(file_path):
     df = pd.read_csv(file_path)
     return df
@@ -23,13 +22,11 @@ def load_dataset_from_excel(file_path):
 data_file = "Phishing_validation_emails.csv"
 df = load_dataset_from_excel(data_file)
 
-# Text Preprocessing
 def clean_text(text):
     text = str(text).lower()
     text = re.sub(f"[{string.punctuation}]", "", text) 
     return text
 
-# Convert text to numerical features (TF-IDF Vectorization)
 def convert_to_dimensions():
     df['Email'] = df['Email'].apply(clean_text)
     
@@ -40,12 +37,9 @@ def convert_to_dimensions():
 
 def train_data():
     x, y = convert_to_dimensions()[0], convert_to_dimensions()[1]
-    # Split data into training and testing sets
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
-    
     model.fit(x_train, y_train)
-
-# Train a Logistic Regression Model
+    
 train_data()
 
 
