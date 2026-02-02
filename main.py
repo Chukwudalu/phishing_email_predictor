@@ -42,7 +42,6 @@ def validator():
 def get_unread_emails():
     
     try:
-        # Call the Gmail API
         service = build("gmail", "v1", credentials=validator())
         results = service.users().messages().list(userId='me', labelIds=['INBOX'], q='is:unread').execute()
         messages = results.get('messages', [])
@@ -55,7 +54,6 @@ def get_unread_emails():
 
             if 'parts' in payload:
                 for part in payload['parts']:
-                    # Extract plain text content
                     if part.get('mimeType') == 'text/plain':  
                         body = part['body'].get('data', '')
                         break
@@ -89,7 +87,6 @@ def create_label(label_text):
     service = build("gmail", "v1", credentials=validator())
     """Creates a new label in the Gmail account."""
     existing_labels = {}
-    # Call the Gmail API to get labels
     results = service.users().labels().list(userId="me").execute()
     labels = results.get("labels", [])
 
@@ -119,18 +116,13 @@ def create_label(label_text):
 
 
 def handle_phishing_detection():
-    # 1. Get the messages
     unread_messages = get_unread_emails()
     if not unread_messages:
         print("no unread messages found")
         return
     msg_ids, messages = zip(*unread_messages)
-    # Split the list of tuples into two seperate lists with one containing the ids and other containing the messages
-    # 2. predict if the message is phishing from the trained model
     predicted_phishing_labels = predict_phishing(messages)
-    # 3. create the label => create_label(label)
     created_label_ids = [create_label(label) for label in predicted_phishing_labels]
-    # 4. Apply the label
     for msg_id, msg_label_id in zip(msg_ids, created_label_ids):
         apply_phishing_prediction_labels(msg_id, msg_label_id)
     
