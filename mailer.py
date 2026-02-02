@@ -10,7 +10,6 @@ from googleapiclient.errors import HttpError
 class Mailer:
     def __init__(self):
         try:
-            # Call the Gmail API
             service = build("gmail", "v1", credentials=self._creds)
             results = service.users().labels().list(userId="me").execute()
             labels = results.get("labels", [])
@@ -23,5 +22,4 @@ class Mailer:
                 print(label["name"])
 
         except HttpError as error:
-            # TODO(developer) - Handle errors from gmail API.
             print(f"An error occurred: {error}")
